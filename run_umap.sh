@@ -21,13 +21,11 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "=========================="
 	echo "*** MANDATORY ARGS ***"
 	echo "--inputfile=[FILENAME] - Input file name (.json) containing images to be processed."
-	
 	echo ""
 
 	echo "*** OPTIONAL ARGS ***"
 	echo "=== INPUT OPTIONS ==="
 	echo "--datalist-key=[KEY] - Dictionary key name to be read in input datalist. Default: data"
-	
 	
 	echo "=== UMAP OPTIONS ==="
 	echo "--predict - Predict data encoding using input UMAP model. Default: False"
@@ -60,7 +58,6 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "--waitcopy - Wait a bit after copying output files to output dir (default=no)"
 	echo "--copywaittime=[COPY_WAIT_TIME] - Time to wait after copying output files (default=30)"
 	echo "--no-logredir - Do not redirect logs to output file in script "	
-	
 	echo "=========================="
   exit 1
 fi
