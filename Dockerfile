@@ -48,9 +48,6 @@ ENV PYTHONPATH=/usr/lib/python3.8/site-packages/
 ######################################
 ##     RUN
 ######################################
-# - Copy models
-COPY models/*.h5 ${MODEL_DIR}
-
 # - Copy run script
 COPY run_job.sh /home/$USER/run_job.sh
 RUN chmod +x /home/$USER/run_job.sh
