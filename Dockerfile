@@ -4,6 +4,8 @@ MAINTAINER Simone Riggi "simone.riggi@gmail.com"
 ######################################
 ##   DEFINE CUSTOMIZABLE ARGS/ENVS
 ######################################
+ENV NUMBA_CACHE_DIR=/tmp
+
 ARG USER_ARG=caesar
 ENV USER $USER_ARG
 
