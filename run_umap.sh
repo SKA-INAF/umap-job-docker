@@ -26,6 +26,8 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "*** OPTIONAL ARGS ***"
 	echo "=== INPUT OPTIONS ==="
 	echo "--datalist-key=[KEY] - Dictionary key name to be read in input datalist. Default: data"
+	echo "--selcols=[COLS] - Data column ids to be selected from input data, separated by commas"
+	echo ""
 	
 	echo "=== UMAP OPTIONS ==="
 	echo "--predict - Predict data encoding using input UMAP model. Default: False"
@@ -43,6 +45,8 @@ if [ "$NARGS" -lt 1 ]; then
 	echo ""
 	
 	echo "=== SAVE OPTIONS ==="
+	echo "--no-save-ascii - Disable save output to ascii format "
+	echo "--no-save-json - Disable save output to json format  "
 	echo "--outfile-unsup=[FILENAME] - Name of UMAP encoded data output file. Default: latent_data_umap_unsupervised.dat"
 	echo "--outfile-unsup-json=[FILENAME] - Name of UMAP encoded data output file in json format. Default: latent_data_umap_unsupervised.json"
 	echo "--outfile-sup=[FILENAME] - Name of UMAP output file with encoded data produced using supervised method (if label data available). Default: latent_data_umap_unsupervised.dat"
@@ -50,6 +54,7 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "--save-labels-in-ascii - Save class labels to ascii. Default: False (save class ids) "
 	
 	echo "=== RUN OPTIONS ==="
+	echo "--run-supervised - Run UMAP also on labelled data alone (if available)."	
 	echo "--run - Run the generated run script on the local shell. If disabled only run script will be generated for later run."	
 	echo "--scriptdir=[SCRIPT_DIR] - Job directory where to find scripts (default=/usr/bin)"
 	echo "--modeldir=[MODEL_DIR] - Job directory where to find model & weight files (default=/opt/models)"
@@ -79,6 +84,7 @@ REDIRECT_LOGS=true
 DATALIST=""
 DATALIST_GIVEN=false
 DATALIST_KEY="data"
+SELCOLS=""
 
 # - UMAP options
 PREDICT=""
@@ -92,6 +98,10 @@ NORMALIZE=""
 SCALERFILE=""
 CLASSID_LABEL_MAP=""
 OBJS_EXCLUDED_IN_TRAIN="0,1"
+RUN_SUPERVISED=""
+NO_SAVE_ASCII=""
+NO_SAVE_JSON=""
+NO_SAVE_MODEL=""
 
 # - Save options
 SAVE_LABELS=""
@@ -116,6 +126,9 @@ do
     ;;
     --datalist-key=*)
     	DATALIST_KEY=`echo $item | sed 's/[-a-zA-Z0-9]*=//'`
+    ;;
+    --selcols=*)
+    	SELCOLS=`echo $item | sed 's/[-a-zA-Z0-9]*=//'`
     ;;
     
     # **************************
@@ -153,6 +166,15 @@ do
     ;;
     
     # - SAVE OPTIONS
+    --no-save-ascii*)
+    	NO_SAVE_ASCII="--no_save_ascii"
+    ;;
+    --no-save-json*)
+    	NO_SAVE_JSON="--no_save_json"
+    ;;
+    --no-save-model*)
+    	NO_SAVE_MODEL="--no_save_model"
+    ;;
     --outfile-unsup=*)
     	OUTFILE_UNSUP=`echo $item | /bin/sed 's/[-a-zA-Z0-9]*=//'`
     ;;
@@ -171,6 +193,9 @@ do
     
 	
 		# - RUN OPTIONS
+		--run-supervised*)
+    	RUN_SUPERVISED="--run_supervised"
+    ;;
     --run*)
     	RUN_SCRIPT=true
     ;;
@@ -222,10 +247,11 @@ fi
 #######################################
 ##   SET OPTIONS
 #######################################
-INPUT_OPTS="--inputfile=$DATALIST --datalist_key=$DATALIST_KEY "
+INPUT_OPTS="--inputfile=$DATALIST --datalist_key=$DATALIST_KEY --selcols=$ELCOLS "
 PREPROC_OPTS="$NORMALIZE --scalerfile=$SCALERFILE --classid_label_map=$CLASSID_LABEL_MAP --objids_excluded_in_train=$OBJS_EXCLUDED_IN_TRAIN "
 UMAP_OPTS="--modelfile_umap=$MODEL $PREDICT --latentdim_umap=$NFEATS --mindist_umap=$MINDIST --nneighbors_umap=$NN "
-SAVE_OPTS="--outfile_umap_unsupervised=$OUTFILE_UNSUP --outfile_umap_supervised=$OUTFILE_SUP --outfile_umap_preclassified=$OUTFILE_PRECLASS --outfile_umap_unsupervised_json=$OUTFILE_UNSUP_JSON $SAVE_LABELS "
+SAVE_OPTS="--outfile_umap_unsupervised=$OUTFILE_UNSUP --outfile_umap_supervised=$OUTFILE_SUP --outfile_umap_preclassified=$OUTFILE_PRECLASS --outfile_umap_unsupervised_json=$OUTFILE_UNSUP_JSON $SAVE_LABELS $NO_SAVE_ASCII $NO_SAVE_JSON $NO_SAVE_MODEL "
+RUN_OPTS="$RUN_SUPERVISED "
 
 #######################################
 ##   DEFINE GENERATE EXE SCRIPT FCN
@@ -261,7 +287,7 @@ generate_exec_script(){
       echo 'echo "*************************************************"'
 				
 			EXE="python $SCRIPT_DIR/run_umap.py" 
-			ARGS="$INPUT_OPTS $PREPROC_OPTS $UMAP_OPTS $SAVE_OPTS"
+			ARGS="$INPUT_OPTS $PREPROC_OPTS $UMAP_OPTS $SAVE_OPTS $RUN_OPTS "
 			CMD="$EXE $ARGS"
 
 			echo "date"
