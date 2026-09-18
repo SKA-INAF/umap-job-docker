@@ -247,7 +247,7 @@ fi
 #######################################
 ##   SET OPTIONS
 #######################################
-INPUT_OPTS="--inputfile=$DATALIST --datalist_key=$DATALIST_KEY --selcols=$ELCOLS "
+INPUT_OPTS="--inputfile=$DATALIST --datalist_key=$DATALIST_KEY --selcols=$SELCOLS "
 PREPROC_OPTS="$NORMALIZE --scalerfile=$SCALERFILE --classid_label_map=$CLASSID_LABEL_MAP --objids_excluded_in_train=$OBJS_EXCLUDED_IN_TRAIN "
 UMAP_OPTS="--modelfile_umap=$MODEL $PREDICT --latentdim_umap=$NFEATS --mindist_umap=$MINDIST --nneighbors_umap=$NN "
 SAVE_OPTS="--outfile_umap_unsupervised=$OUTFILE_UNSUP --outfile_umap_supervised=$OUTFILE_SUP --outfile_umap_preclassified=$OUTFILE_PRECLASS --outfile_umap_unsupervised_json=$OUTFILE_UNSUP_JSON $SAVE_LABELS $NO_SAVE_ASCII $NO_SAVE_JSON $NO_SAVE_MODEL "
@@ -258,6 +258,9 @@ RUN_OPTS="$RUN_SUPERVISED "
 #######################################
 # - Set shfile
 shfile="run_umap.sh"
+
+# - Set log file
+logfile="out.log"
 
 generate_exec_script(){
 
@@ -333,6 +336,14 @@ generate_exec_script(){
 				echo 'if [ $tab_count != 0 ] ; then'
 				echo "  echo \"INFO: Copying output json file(s) to $JOB_OUTDIR ...\""
 				echo "  cp *.json $JOB_OUTDIR"
+				echo "fi"
+				
+				echo " "
+				
+				echo 'tab_count=`ls -1 *.log 2>/dev/null | wc -l`'
+				echo 'if [ $tab_count != 0 ] ; then'
+				echo "  echo \"INFO: Copying output log file(s) to $JOB_OUTDIR ...\""
+				echo "  cp *.log $JOB_OUTDIR"
 				echo "fi"
 				
 				echo " "

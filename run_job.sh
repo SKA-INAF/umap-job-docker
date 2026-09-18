@@ -10,7 +10,7 @@ CHANGE_USER=true
 JOB_DIR=""
 JOB_OUTDIR=""
 JOB_ARGS=""
-INPUTFILE=""
+###INPUTFILE=""
 
 # - RCLONE OPTIONS
 MOUNT_RCLONE_VOLUME=0
@@ -45,9 +45,9 @@ do
 		--jobargs=*)
     	JOB_ARGS=`echo "$item" | /bin/sed 's/[-a-zA-Z0-9]*=//'`
     ;;
-		--inputfile=*)
-    	INPUTFILE=`echo $item | /bin/sed 's/[-a-zA-Z0-9]*=//'`
-    ;;
+##		--inputfile=*)
+##    	INPUTFILE=`echo $item | /bin/sed 's/[-a-zA-Z0-9]*=//'`
+##    ;;
 		--mount-rclone-volume=*)
     	MOUNT_RCLONE_VOLUME=`echo $item | /bin/sed 's/[-a-zA-Z0-9]*=//'`
     ;;
@@ -77,13 +77,17 @@ done
 
 
 # - Check options
-if [ "$JOB_ARGS" = "" ]; then
-	if [ "$INPUTFILE" = "" ]; then
-	  echo "ERROR: Empty INPUTFILE argument (hint: you must specify an input file path)!"
-	  exit 1
-	fi
-fi
+#if [ "$JOB_ARGS" = "" ]; then
+#	if [ "$INPUTFILE" = "" ]; then
+#	  echo "ERROR: Empty INPUTFILE argument (hint: you must specify an input file path)!"
+#	  exit 1
+#	fi
+#fi
 
+if [ "$JOB_ARGS" = "" ]; then
+	echo "ERROR: Empty JOB_ARGS argument!"
+	exit 1
+fi
 
 
 ###############################
@@ -148,10 +152,10 @@ if [ "$JOB_DIR" == "" ]; then
 fi
 
 # - Set options
-DATA_OPTIONS=""
-if [ "$INPUTFILE" != "" ]; then
-	DATA_OPTIONS="--inputfile=$INPUTFILE "
-fi
+#DATA_OPTIONS=""
+#if [ "$INPUTFILE" != "" ]; then
+#	DATA_OPTIONS="--inputfile=$INPUTFILE "
+#fi
 
 RUN_OPTIONS="--run --jobdir=$JOB_DIR "
 if [ "$JOB_OUTDIR" != "" ]; then
@@ -161,7 +165,8 @@ if [ "$JOB_OUTDIR" != "" ]; then
 	fi	
 fi
 
-JOB_OPTIONS="$RUN_OPTIONS $DATA_OPTIONS $JOB_ARGS "
+##JOB_OPTIONS="$RUN_OPTIONS $DATA_OPTIONS $JOB_ARGS "
+JOB_OPTIONS="$RUN_OPTIONS $JOB_ARGS "
 
 
 
