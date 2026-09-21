@@ -26,7 +26,7 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "*** OPTIONAL ARGS ***"
 	echo "=== INPUT OPTIONS ==="
 	echo "--datalist-key=[KEY] - Dictionary key name to be read in input datalist. Default: data"
-	echo "--selcols=[COLS] - Data column ids to be selected from input data, separated by commas"
+	echo "--selcols=[COLS] - Data column ids to be selected from input data, separated by colons"
 	echo ""
 	
 	echo "=== UMAP OPTIONS ==="
@@ -41,7 +41,7 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "--normalize - Apply minmax normalization to images "
 	echo "--scalerfile=[SCALER_FILE] - Load and use data transform stored in this file (.sav)."
 	echo "--classid-label-map=[DICT] - Class ID label dictionary. Will take labels from input dictionary label field if left empty. Default: empty"
-	echo "--objids-excluded-in-train=[OBJIDS] - Source ids not included for training as considered unknown classes. Default: -1,0"		
+	echo "--objids-excluded-in-train=[OBJIDS] - Source ids, separated by colons, not included for supervised UMAP training as considered unknown classes. Default: -1:0"		
 	echo ""
 	
 	echo "=== SAVE OPTIONS ==="
@@ -97,7 +97,7 @@ NN=15
 NORMALIZE=""
 SCALERFILE=""
 CLASSID_LABEL_MAP=""
-OBJS_EXCLUDED_IN_TRAIN="0,1"
+OBJS_EXCLUDED_IN_TRAIN="-1,0"
 RUN_SUPERVISED=""
 NO_SAVE_ASCII=""
 NO_SAVE_JSON=""
@@ -344,6 +344,14 @@ generate_exec_script(){
 				echo 'if [ $tab_count != 0 ] ; then'
 				echo "  echo \"INFO: Copying output log file(s) to $JOB_OUTDIR ...\""
 				echo "  cp *.log $JOB_OUTDIR"
+				echo "fi"
+				
+				echo " "
+				
+				echo 'tab_count=`ls -1 *.sav 2>/dev/null | wc -l`'
+				echo 'if [ $tab_count != 0 ] ; then'
+				echo "  echo \"INFO: Copying output model & data loader file(s) to $JOB_OUTDIR ...\""
+				echo "  cp *.sav $JOB_OUTDIR"
 				echo "fi"
 				
 				echo " "
