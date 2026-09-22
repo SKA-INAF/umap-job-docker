@@ -97,7 +97,7 @@ NN=15
 NORMALIZE=""
 SCALERFILE=""
 CLASSID_LABEL_MAP=""
-OBJS_EXCLUDED_IN_TRAIN="-1:0"
+IDS_EXCLUDED_IN_TRAIN="-1:0"
 RUN_SUPERVISED=""
 NO_SAVE_ASCII=""
 NO_SAVE_JSON=""
@@ -161,8 +161,8 @@ do
     --classid-label-map=*)
     	CLASSID_LABEL_MAP=`echo $item | sed 's/[-a-zA-Z0-9]*=//'`
     ;;
-    --objids-excluded-in-train=*)
-    	OBJS_EXCLUDED_IN_TRAIN=`echo $item | sed 's/[-a-zA-Z0-9]*=//'`
+    --ids-excluded-in-train=*)
+    	IDS_EXCLUDED_IN_TRAIN=`echo $item | sed 's/[-a-zA-Z0-9]*=//'`
     ;;
     
     # - SAVE OPTIONS
@@ -248,7 +248,7 @@ fi
 ##   SET OPTIONS
 #######################################
 INPUT_OPTS="--inputfile=$DATALIST --datalist_key=$DATALIST_KEY --selcols=$SELCOLS "
-PREPROC_OPTS="$NORMALIZE --scalerfile=$SCALERFILE --classid_label_map=$CLASSID_LABEL_MAP --objids_excluded_in_train=$OBJS_EXCLUDED_IN_TRAIN "
+PREPROC_OPTS="$NORMALIZE --scalerfile=$SCALERFILE --classid_label_map=$CLASSID_LABEL_MAP --objids_excluded_in_train=$IDS_EXCLUDED_IN_TRAIN "
 UMAP_OPTS="--modelfile_umap=$MODEL $PREDICT --latentdim_umap=$NFEATS --mindist_umap=$MINDIST --nneighbors_umap=$NN "
 SAVE_OPTS="--outfile_umap_unsupervised=$OUTFILE_UNSUP --outfile_umap_supervised=$OUTFILE_SUP --outfile_umap_preclassified=$OUTFILE_PRECLASS --outfile_umap_unsupervised_json=$OUTFILE_UNSUP_JSON $SAVE_LABELS $NO_SAVE_ASCII $NO_SAVE_JSON $NO_SAVE_MODEL "
 RUN_OPTS="$RUN_SUPERVISED "
