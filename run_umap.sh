@@ -26,7 +26,7 @@ if [ "$NARGS" -lt 1 ]; then
 	echo "*** OPTIONAL ARGS ***"
 	echo "=== INPUT OPTIONS ==="
 	echo "--datalist-key=[KEY] - Dictionary key name to be read in input datalist. Default: data"
-	echo "--selcols=[COLS] - Data column ids to be selected from input data, separated by colons"
+	echo "--selcols=[COLS] - Data column ids to be selected from input data, separated by dashes"
 	echo ""
 	
 	echo "=== UMAP OPTIONS ==="

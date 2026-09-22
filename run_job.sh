@@ -168,14 +168,11 @@ fi
 ##JOB_OPTIONS="$RUN_OPTIONS $DATA_OPTIONS $JOB_ARGS "
 JOB_OPTIONS="$RUN_OPTIONS $JOB_ARGS "
 
-
-
 ###############################
-##    RUN SCLASSIFIER JOB
+##    RUN UMAP JOB
 ###############################
 
 # - Define run command & args
-#EXE="python3 /usr/local/bin/run_umap.py"
 EXE="/home/$RUNUSER/run_umap.sh"
 
 if [ "$CHANGE_USER" = true ]; then
